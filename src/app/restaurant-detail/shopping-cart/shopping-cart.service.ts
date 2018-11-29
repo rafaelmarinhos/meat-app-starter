@@ -1,7 +1,10 @@
 import { MenuItem } from "./../menu-item/menu-item.model";
 import { CartItem } from "./cart-item.model";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class ShoppingCartService {
+
   items: CartItem[] = [];
 
   clear() {
@@ -11,9 +14,20 @@ export class ShoppingCartService {
   addItem(item: MenuItem) {
     let foundItem = this.items.find(x => x.menuItem.id === item.id);
     if (foundItem) {
-      foundItem.qtde = foundItem.qtde + 1;
+      this.incQtde(foundItem);
     } else {
       this.items.push(new CartItem(item));
+    }
+  }
+
+  incQtde(item: CartItem) {
+    item.qtde++;
+  }
+
+  decQtde(item: CartItem) {
+    item.qtde--;
+    if (item.qtde === 0) {
+      this.removeItem(item);
     }
   }
 
